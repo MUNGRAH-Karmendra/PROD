@@ -1,0 +1,148 @@
+# Stack GLPI_V1 / GLPI_V2 + NEXTCLOUD_V1 / NEXTCLOUD_V2 + BD_GLPI / BD_NEXTCLOUD
+# CADDY Reverse Proxy SSL Config
+services:
+  glpi:
+    image: glpi/glpi
+    container_name: glpi_v1
+    ports:
+      - 80
+    depends_on:
+      - mariadb_glpi
+    environment:
+      - GLPI_DB_HOST=mariadb_glpi
+      - GLPI_DB_USER=glpi
+      - GLPI_DB_PASSWORD=glpi
+      - GLPI_DB_NAME=mariadb_glpi
+    volumes:
+      - glpi_vl:/var/www/glpi
+    networks:
+      ipvlan-prod:
+        ipv4_address: 192.168.50.50
+
+  glpi_v2:
+    image: glpi/glpi
+    container_name: glpi_v2
+    ports:
+      - 80
+    depends_on:
+      - mariadb_glpi
+    environment:
+      - GLPI_DB_HOST=mariadb_glpi
+      - GLPI_DB_USER=glpi
+      - GLPI_DB_PASSWORD=glpi
+      - GLPI_DB_NAME=mariadb_glpi
+    volumes:
+      - glpi_vl:/var/www/glpi
+    networks:
+      ipvlan-prod:
+        ipv4_address: 192.168.50.51
+
+  # mdp : nextcloud_password
+  nextcloud:
+    image: nextcloud:latest
+    container_name: nextcloud_v1
+    ports:
+      -  80
+    depends_on:
+      - mariadb_nextcloud
+    environment:
+      - DB_SERVER__HOST=mariadb_nextcloud
+      - MYSQL_USER=nextcloud
+      - MYSQL_PASSWORD=nextcloud
+      - MYSQL_DATABASE=mariadb_nextcloud
+    volumes:
+      - nextcloud_vl:/var/www/html
+    networks:
+      ipvlan-prod:
+        ipv4_address: 192.168.50.60
+
+  nextcloud_v2:
+    image: nextcloud:latest
+    container_name: nextcloud_v2
+    ports:
+      -  80
+    depends_on:
+      - mariadb_nextcloud
+    environment:
+      - DB_SERVER_HOST=mariadb_nextcloud
+      - MYSQL_USER=nextcloud
+      - MYSQL_PASSWORD=nextcloud
+      - MYSQL_DATABASE=mariadb_nextcloud
+    volumes:
+      - nextcloud_vl:/var/www/html
+    networks:
+      ipvlan-prod:
+        ipv4_address: 192.168.50.61
+
+
+  portainer:
+    image: portainer/portainer-ce:lts
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    ports:
+      - 9443:9443
+      - 8000:8000
+    networks:
+      ipvlan-prod:
+        ipv4_address: 192.168.50.70
+
+  mariadb_glpi:
+    image: mariadb
+    container_name: mariadb_glpi
+    restart: always
+    environment:
+      MYSQL_USER: glpi
+      MYSQL_PASSWORD: glpi
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mariadb_glpi
+    volumes:
+      - mariadb_glpi_data:/var/lib/mysql
+    networks:
+      ipvlan-prod:
+        ipv4_address: 192.168.50.80
+
+  mariadb_nextcloud:
+    image: mariadb
+    container_name: mariadb_nextcloud
+    restart: always
+    environment:
+      MYSQL_USER: nextcloud
+      MYSQL_PASSWORD: nextcloud
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mariadb_nextcloud
+    volumes:
+      - mariadb_nextcloud_data:/var/lib/mysql
+    networks:
+      ipvlan-prod:
+        ipv4_address: 192.168.50.90
+
+  caddy:
+    image: caddy:latest
+    container_name: caddy_proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      ipvlan-prod:
+        ipv4_address: 192.168.50.100
+
+volumes:
+  portainer_data:
+  glpi_vl:
+  nextcloud_vl:
+  mariadb_glpi_data:
+  mariadb_nextcloud_data:
+  caddy_data:
+  caddy_config:
+
+networks:
+  ipvlan-prod:
+    external: true
+    name: "ipvlan-prod"
