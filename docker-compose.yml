@@ -1,5 +1,3 @@
-# Stack GLPI_V1 / GLPI_V2 + NEXTCLOUD_V1 / NEXTCLOUD_V2 + BD_GLPI / BD_NEXTCLOUD
-# CADDY Reverse Proxy SSL Config
 services:
   glpi:
     image: glpi/glpi
@@ -37,7 +35,7 @@ services:
       ipvlan-prod:
         ipv4_address: 192.168.50.51
 
-  # mdp : nextcloud_password
+  
   nextcloud:
     image: nextcloud:latest
     container_name: nextcloud_v1
