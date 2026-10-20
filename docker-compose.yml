@@ -15,7 +15,7 @@ services:
       - glpi_vl:/var/www/glpi
     networks:
       ipvlan-prod:
-        ipv4_address: 192.168.50.50
+        ipv4_address: 192.168.2.50
 
   glpi_v2:
     image: glpi/glpi
@@ -33,7 +33,7 @@ services:
       - glpi_vl:/var/www/glpi
     networks:
       ipvlan-prod:
-        ipv4_address: 192.168.50.51
+        ipv4_address: 192.168.2.51
 
   
   nextcloud:
@@ -52,7 +52,7 @@ services:
       - nextcloud_vl:/var/www/html
     networks:
       ipvlan-prod:
-        ipv4_address: 192.168.50.60
+        ipv4_address: 192.168.2.60
 
   nextcloud_v2:
     image: nextcloud:latest
@@ -70,7 +70,7 @@ services:
       - nextcloud_vl:/var/www/html
     networks:
       ipvlan-prod:
-        ipv4_address: 192.168.50.61
+        ipv4_address: 192.168.2.61
 
 
   portainer:
@@ -84,7 +84,7 @@ services:
       - 8000:8000
     networks:
       ipvlan-prod:
-        ipv4_address: 192.168.50.70
+        ipv4_address: 192.168.2.70
 
   mariadb_glpi:
     image: mariadb
@@ -99,7 +99,7 @@ services:
       - mariadb_glpi_data:/var/lib/mysql
     networks:
       ipvlan-prod:
-        ipv4_address: 192.168.50.80
+        ipv4_address: 192.168.2.80
 
   mariadb_nextcloud:
     image: mariadb
@@ -114,7 +114,7 @@ services:
       - mariadb_nextcloud_data:/var/lib/mysql
     networks:
       ipvlan-prod:
-        ipv4_address: 192.168.50.90
+        ipv4_address: 192.168.2.90
 
   caddy:
     image: caddy:latest
@@ -129,7 +129,7 @@ services:
       - caddy_config:/config
     networks:
       ipvlan-prod:
-        ipv4_address: 192.168.50.100
+        ipv4_address: 192.168.2.100
 
 volumes:
   portainer_data:
