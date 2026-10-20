@@ -1,7 +1,7 @@
 glpi.lan {
     tls internal
     
-    reverse_proxy 192.168.50.50:80 192.168.50.51:80 {
+    reverse_proxy 192.168.2.50:80 192.168.2.51:80 {
 		
 		lb_policy cookie lb_glpi {
       			fallback first
@@ -19,10 +19,10 @@ glpi.lan {
 
 nextcloud.lan {
     tls internal
-    reverse_proxy 192.168.50.60:80
+    reverse_proxy 192.168.2.60:80
 }
 
 nextcloud2.lan {
     tls internal
-    reverse_proxy 192.168.50.61:80
+    reverse_proxy 192.168.2.61:80
 }
