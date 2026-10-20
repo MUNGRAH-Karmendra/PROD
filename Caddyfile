@@ -1,0 +1,28 @@
+glpi.lan {
+    tls internal
+    
+    reverse_proxy 192.168.50.50:80 192.168.50.51:80 {
+		
+		lb_policy cookie lb_glpi {
+      			fallback first
+                }
+		
+	 
+		health_uri /
+		health_interval 5s
+		health_timeout 120s
+    }
+        
+        
+}
+
+
+nextcloud.lan {
+    tls internal
+    reverse_proxy 192.168.50.60:80
+}
+
+nextcloud2.lan {
+    tls internal
+    reverse_proxy 192.168.50.61:80
+}
